@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace kNN_te18_1
 {
@@ -62,15 +64,42 @@ namespace kNN_te18_1
             {
                 List<double[]> allImageData = new List<double[]>();
 
+                int counter = 0;
+
                 //För alla valda filer
                 foreach(string fileName in openDialog.FileNames)
                 {
+                    //Som en progress bar
+                    Text = counter.ToString();
+                    counter++;
+
                     //Läs av filen
                     double[] data = GetImageData(fileName);
 
                     //Spara datan i listan
                     allImageData.Add(data);
                 }
+
+                string allImageDataJson = JsonConvert.SerializeObject(allImageData);
+                File.WriteAllText("data.json", allImageDataJson);
+
+            }
+        }
+
+        private double CalculateDistance2D(double x1, double y1, double x2, double y2)
+        {
+            double distance = Math.Sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+            return distance;
+        }
+
+        private double CalculateDistance(double[] v1, double[] v2)
+        {
+            double sum = 0;
+            for (int i = 0; i < v1.Length; i++)
+            {
+                //Beräkna differens mellan v2[i] och v1[i]
+                //Kvadrera differensen
+                //Öka på sum med det beräknade värdet
             }
         }
     }
